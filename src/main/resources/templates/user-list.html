@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+</head>
+<body>
+<div th:switch="${users}">
+    <h2 th:case="null">No users found!</h2>
+    <div th:case="*">
+        <h2>Users</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>First name</th>
+                <th>Last name</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user : ${users}">
+                <td th:text="${user.id}"></td>
+                <td th:text="${user.firstName}"></td>
+                <td th:text="${user.lastName}"></td>
+                <td><a th:href="@{user-update/{id}(id=${user.id})}">Edit</a></td>
+                <td><a th:href="@{user-delete/{id}(id=${user.id})}">Delete</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <p><a href="/user-create">Create user</a></p>
+    <!-- Форма для обновления пользователя по ID -->
+    <form id="updateForm" onsubmit="redirectToUpdate(event)" method="get">
+        <input type="number" id="userId" name="id" placeholder="Enter ID to update" required>
+        <button type="submit">Update by ID</button>
+    </form>
+
+    <script>
+        function redirectToUpdate(event) {
+            event.preventDefault(); // Предотвратить стандартную отправку формы
+            var id = document.getElementById('userId').value;
+            window.location.href = '/user-update/' + id; // Перенаправить браузер на URL редактирования
+        }
+    </script>
+    <!-- Форма для удаления пользователя по ID -->
+    <form th:action="@{/user-delete}" method="post">
+        <input type="number" name="id" placeholder="Enter ID to delete" required>
+        <button type="submit">Delete by ID</button>
+    </form>
+    <!-- Форма для удаления всех пользователей -->
+    <form th:action="@{deleteAll}" method="post">
+        <input type="submit" value="Delete All Users">
+    </form>
+</div>
+</body>
+</html>
