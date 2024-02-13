@@ -1,0 +1,3 @@
+db:
+  findAllUsers: "SELECT * FROM userTable"
+  deleteUserById: "DELETE FROM userTable WHERE id = ?"
